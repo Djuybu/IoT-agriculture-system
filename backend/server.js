@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 const connectDB = require('./config/connectDB')
-const mqttService = require('./services/mqtt.service');
+// const mqttService = require('./services/mqtt.service');
 const http = require('http'); 
 const socketService = require('./services/socket.service');
 require('./services/action.handler');
@@ -16,7 +16,7 @@ const actionRoutes = require('./routers/action.route')
 const deviceRoutes = require('./routers/device.route')
 const statsRoutes = require('./routers/stats.route')
 const errorHandler = require('./middlewares/error.middleware');
-
+const getDataFromCache = require ('./middlewares/redis.middleware')
 const app = express();
 const server = http.createServer(app); // Tạo server từ app express
 const port = process.env.PORT || 8081;
@@ -29,7 +29,7 @@ app.use(cors({
     credentials: true  // nếu dùng cookie/session
 }));
 app.use(express.json());
-
+app.use(getDataFromCache);
 app.use('/api/sensor-data', sensorDataRoutes);
 app.use('/api/actions', actionRoutes);
 app.use('/api/devices', deviceRoutes);
@@ -38,11 +38,12 @@ app.use('/api/stats', statsRoutes);
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
+
 connectDB();
 
 server.listen(port, async () => {
     console.log(` Server đang chạy trên cổng ${port}`);
-    mqttService.connect();
+    // mqttService.connect();
     try {
         await cleanupPendingActions();
         console.log('✅ Hoàn tất kiểm tra và dọn dẹp lệnh cũ.');
