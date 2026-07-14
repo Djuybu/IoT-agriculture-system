@@ -18,7 +18,7 @@ const sensorDataRoutes = require('./routers/sensor-data.route')
 const actionRoutes = require('./routers/action.route')
 const deviceRoutes = require('./routers/device.route')
 const statsRoutes = require('./routers/stats.route')
-const errorHandler = require('./middlewares/error.middleware');
+const errorHandler = require('./seeders/middlewares/error.middleware.js');
 
 const app = express();
 const server = http.createServer(app); // Tạo server từ app express
