@@ -69,6 +69,11 @@ module.exports = (sequelize, DataTypes) => {
         limit: 50
       });
 
+      // select type, value, measuredAt 
+      // from sensor_data
+      // order by measured_at desc
+      // limit 50
+
       if (!rawData || rawData.length === 0) {
         return {
           latest: { temperature: 0, humidity: 0, lux: 0 },
@@ -84,6 +89,8 @@ module.exports = (sequelize, DataTypes) => {
           latestMap[item.type] = item.value;
         }
       });
+
+      
 
       // 3. Đóng gói dữ liệu trả về
       return {
